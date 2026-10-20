@@ -14,18 +14,16 @@ public class FinancialCalculatorsApp {
         Please choose a calculator:
           1) Mortgage Calculator
           2) CD Future Value Calculator
-          3) Annuity Present Value Calculator
         ==========================================
         """;
 
         System.out.print(menu);
-        System.out.print("Enter your choice (1-3): "); // User selects
+        System.out.print("Enter your choice (1-2): "); // User selects
         int choice = scanner.nextInt();
 
         switch (choice) {
             case 1 -> mortgageCalculator(scanner);
             case 2 -> cdFutureValueCalculator(scanner);
-            case 3 -> annuityPresentValueCalculator(scanner);
             default -> System.out.println("Invalid choice.");
         }
 
@@ -68,11 +66,30 @@ public class FinancialCalculatorsApp {
         System.out.printf("Total interest:  $%,.2f%n", totalInterest);
     }
 
-    public static double cdFutureValueCalculator(Scanner scanner) {
-        return askDouble(scanner, "Please enter the principal: ");
+    public static void cdFutureValueCalculator(Scanner scanner) {
+        System.out.println("\n--- CD Future Value Calculator ---");
+
+        // Inputs
+        double depositAmount = askDouble(scanner, "Please enter the deposit amount: ");
+        double interestRatePercentage = askDouble(scanner, "Please enter the interest rate as a percentage: ");
+        double years = askDouble(scanner, "Please enter the number of years: ");
+
+        // Formula pieces
+        double r = interestRatePercentage / 100.0;   // annual rate as a decimal
+        double d = 365;                              // days per year (daily compounding)
+        double n = d * years;                        // total number of days
+
+        // FV = P × (1 + r/d)^n
+        double growthFactor = Math.pow(1 + (r / d), n);
+        double futureValue = depositAmount * growthFactor;
+
+        // Interest Earned = FV − P
+        double interestEarned = futureValue - depositAmount;
+
+        // Output
+        System.out.printf("Future Value : $%,.2f%n", futureValue);
+        System.out.printf("Interest Earned:  $%,.2f%n", interestEarned);
     }
 
-    public static double annuityPresentValueCalculator(Scanner scanner) {
-        return askDouble(scanner, "Please enter the principal: ");
-    }
+
 }
